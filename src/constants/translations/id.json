@@ -1,0 +1,125 @@
+{
+  "common": {
+    "appDetails": "App Detail",
+    "appName": "App nama",
+    "appVersion": "Versi App",
+    "buildVersion": "Versi Build",
+    "expoVersion": "Versi Expo",
+    "about": "Tentang",
+    "visit": "Visit",
+    "posted": "Diposting ddi {{date}}",
+    "recommended": "Rekomendasi untuk kamu",
+    "viewall": "Lihat Semua",
+    "more": "Lainnya",
+    "follow": "Follow",
+    "followed": "Followed",
+    "search": "Cari",
+    "night": "malam",
+    "day": "hari",
+    "booknow": "Pesan Sekarang",
+    "selectDate": "Pilih tanggal",
+    "checkInOut": "Check-In & Check-Out",
+    "adults": "Dewasa",
+    "roomType": "Room Type",
+    "luxury": "Luxury",
+    "message": "Masukkan pesan Anda",
+    "album": "Album",
+    "or": "atau",
+    "name": "Nama",
+    "namePlaceholder": "Masukkan nama Anda",
+    "email": "Email",
+    "emailPlaceholder": "Masukkan email Anda",
+    "password": "Password",
+    "passwordPlaceholder": "Masukkan password",
+    "agree": "Saya Setuju dengan ",
+    "terms": "Syarat dan ketentuan",
+    "signup": "Mendaftar",
+    "signin": "Masuk",
+    "goBack": "Kembali",
+    "inStock": "Stok ada",
+    "outStock": "Stok habis",
+    "addToCart": "Tambah ke keranjang",
+    "checkout": "Proses ke checkout",
+    "readArticle": "Baca Artikel",
+    "send": "Kirim",
+    "sold": "Terjual",
+    "top": "Top Seller",
+    "guests": {
+      "one": "1 tamu",
+      "other": "{{count}} tamu",
+      "zero": "0 tamu"
+    }
+  },
+  "app": {
+    "name": "Gemah Ripah",
+    "fullname": "Gemah Ripah Mobile",
+    "native": "React Native",
+    "link": "creative-tim.com"
+  },
+  "darkMode": "Dark Mode",
+  "screens": {
+    "home": "Home",
+    "components": "Components",
+    "articles": "Artikel",
+    "rental": "Rental",
+    "profile": "Profil",
+    "settings": "Pengaturan",
+    "register": "Buat akun",
+    "login": "Login",
+    "extra": "Extra - Automotive"
+  },
+  "navigation": {
+    "home": "Gemah Ripah",
+    "components": "Components",
+    "articles": "Soft UI",
+    "rentals": "Soft UI",
+    "rental": "Best Deal",
+    "booking": "Pemesanan",
+    "chat": "Chat",
+    "profile": "Profil",
+    "settings": "Settings",
+    "notifications": "Pemberitauan",
+    "agreement": "Perjanjian Pengguna",
+    "about": "Tenteang",
+    "privacy": "Privasi",
+    "register": "Daftar",
+    "login": "Login",
+    "extra": "Automotive",
+    "shopping": "Keranjang"
+  },
+  "menu": {
+    "started": "Mulai",
+    "documentation": "Dokumentasi"
+  },
+  "home": {
+    "title": "Gemah Ripah",
+    "following": "Following",
+    "trending": "Populer"
+  },
+  "register": {
+    "title": "Selamat Datang",
+    "subtitle": "Daftar dengan"
+  },
+  "login": {
+    "title": "Selamat Datang",
+    "subtitle": "Login dengan"
+  },
+  "profile": {
+    "title": "Profil",
+    "posts": "Posts",
+    "followers": "Followers",
+    "following": "Following",
+    "aboutMe": "Tentang saya"
+  },
+  "pro": {
+    "title": "Soft UI PRO",
+    "alert": "This feature is available in PRO version",
+    "components": "• {{count} Components (Buttons, Inputs, Cards, etc)",
+    "screens": "• {{count} Screens (Shopping, Notifications, Chat, etc)",
+    "support": "• Premium Support included",
+    "takeAdvantage": "Take advantage of all the features and screens coded on React Native for both",
+    "appTemplate": "Soft UI PRO React Native is an innovative app template that will help you built stunning mobile applications in no time. It features a huge number of components and screens built to fit together and look amazing:",
+    "saveTime": "This modern app template will save you a lot of time going from prototyping to full-functional code, because all elements are implemented. We wanted the design process to be seamless, so switching from image to the real page is very easy to do!",
+    "buyNow": "Buy now"
+  }
+}
