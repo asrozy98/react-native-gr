@@ -1,15 +1,32 @@
-import React, { useCallback, useState } from 'react';
+import React, {useCallback, useEffect, useState} from 'react';
 
-import { useData, useTheme, useTranslation } from '../hooks/';
-import { Block, Button, Image, Input, Product, Text } from '../components/';
+import {useData, useTheme, useTranslation} from '../hooks/';
+import {Block, Button, Image, Input, Product, Text} from '../components/';
 import Produk from '../components/Produk';
+import {useDispatch, useSelector} from 'react-redux';
+import {ApplicationState} from '../redux';
+import {onProduk, onLoading} from '../redux/actions/produkActions';
+import {ActivityIndicator, FlatList} from 'react-native';
 
 const Home = () => {
-  const { t } = useTranslation();
+  const {t} = useTranslation();
   const [tab, setTab] = useState<number>(0);
-  const { following, trending } = useData();
+  const dispatch = useDispatch();
+  const {following, trending} = useData();
   const [products, setProducts] = useState(following);
-  const { assets, colors, fonts, gradients, sizes } = useTheme();
+  const [cari, setCari] = useState(null);
+  const [kategori, setKategori] = useState(null);
+  const [page, setPage] = useState(10);
+  const {assets, colors, fonts, gradients, sizes} = useTheme();
+  const auth = useSelector((state: ApplicationState) => state.AuthReducer);
+  const {data, count, loading} = useSelector(
+    (state: ApplicationState) => state.ProdukReducer,
+  );
+
+  useEffect(() => {
+    dispatch(onProduk(auth.token, kategori, cari, page));
+    console.log(data);
+  }, [kategori, cari, page]);
 
   const handleProducts = useCallback(
     (tab: number) => {
@@ -18,16 +35,28 @@ const Home = () => {
     },
     [following, trending, setTab, setProducts],
   );
+  const setPerPage = () => {
+    dispatch(onLoading());
+    if (page < count) {
+      setPage(page + 10);
+    } else {
+      setPage(count);
+    }
+  };
 
   return (
     <Block>
       {/* search input */}
       <Block color={colors.card} flex={0} padding={sizes.padding}>
-        <Input search placeholder={t('common.search')} />
+        <Input
+          search
+          placeholder={t('common.search')}
+          onChangeText={(value) => setCari(value)}
+        />
       </Block>
 
       {/* toggle products list */}
-      <Block
+      {/* <Block
         row
         flex={0}
         align="center"
@@ -81,18 +110,35 @@ const Home = () => {
             </Text>
           </Block>
         </Button>
-      </Block>
+      </Block> */}
 
       {/* products list */}
       <Block
-        scroll
         paddingHorizontal={sizes.padding}
-        showsVerticalScrollIndicator={false}
-        contentContainerStyle={{ paddingBottom: sizes.l }}>
-        <Block row wrap="wrap" justify="space-between" marginTop={sizes.sm}>
-          {products?.map((product) => (
-            <Produk {...product} key={`card-${product?.id}`} />
-          ))}
+        contentContainerStyle={{paddingBottom: sizes.l}}>
+        <Block justify="center" marginTop={sizes.sm}>
+          {/* {data &&
+            data?.map((item, index) => (
+              <Produk item={item} key={`card-${index}`} />
+            ))} */}
+          {data && (
+            <FlatList
+              data={data}
+              onEndReached={() => setPerPage()}
+              onEndReachedThreshold={0.5}
+              renderItem={(item) => <Produk item={item.item} />}
+              keyExtractor={(item) => item.id}
+              numColumns={2}
+              ListEmptyComponent={() => <Text center>{t('common.empty')}</Text>}
+            />
+          )}
+          {loading ? (
+            <ActivityIndicator
+              size="large"
+              // style={{flex: 1, justifyContent: 'center'}}
+              color={colors.primary}
+            />
+          ) : null}
         </Block>
       </Block>
     </Block>

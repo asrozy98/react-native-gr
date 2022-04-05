@@ -229,19 +229,22 @@ const Register = () => {
                 marginVertical={sizes.s}
                 marginHorizontal={sizes.sm}
                 gradient={gradients.primary}
-                disabled={Object.values(isValid).includes(false)}>
+                outlined
+                shadow={!isAndroid}>
                 <Text bold white transform="uppercase">
                   {t('common.signup')}
                 </Text>
               </Button>
               <Button
-                primary
-                outlined
-                shadow={!isAndroid}
+                color={colors.secondary}
                 marginVertical={sizes.s}
                 marginHorizontal={sizes.sm}
-                onPress={() => navigation.navigate('Pro')}>
-                <Text bold primary transform="uppercase">
+                onPress={() => {
+                  navigation.navigate('Screens', {
+                    screen: 'Login',
+                  });
+                }}>
+                <Text bold white transform="uppercase">
                   {t('common.signin')}
                 </Text>
               </Button>

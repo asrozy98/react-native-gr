@@ -44,6 +44,7 @@
     "send": "Kirim",
     "sold": "Terjual",
     "top": "Top Seller",
+    "empty": "Data Tidak Ditemukan",
     "guests": {
       "one": "1 tamu",
       "other": "{{count}} tamu",
@@ -89,6 +90,7 @@
   },
   "menu": {
     "started": "Mulai",
+    "logout": "Keluar",
     "documentation": "Dokumentasi"
   },
   "home": {
@@ -110,6 +112,9 @@
     "followers": "Followers",
     "following": "Following",
     "aboutMe": "Tentang saya"
+  },
+  "product":{
+    "description": "Deskripsi"
   },
   "pro": {
     "title": "Soft UI PRO",

@@ -1,5 +1,5 @@
-import React, {useCallback} from 'react';
-import {Platform, Linking} from 'react-native';
+import React, {useCallback, useState} from 'react';
+import {Platform, Linking, useWindowDimensions} from 'react-native';
 import {Ionicons} from '@expo/vector-icons';
 import {useNavigation} from '@react-navigation/core';
 
@@ -7,11 +7,14 @@ import {Block, Button, Image, Text} from '../components/';
 import {useData, useTheme, useTranslation} from '../hooks/';
 import numeral from 'numeral';
 import {TouchableOpacity} from 'react-native-gesture-handler';
+import RenderHtml from 'react-native-render-html';
 
 const isAndroid = Platform.OS === 'android';
 
 const ProdukDetail = ({route}) => {
-  const {namaProduk} = route.params;
+  const {width} = useWindowDimensions();
+  const {name, image, price, stock, description} = route.params;
+  const [foto, setFoto] = useState(image[0].image);
   const {user} = useData();
   const {t} = useTranslation();
   const navigation = useNavigation();
@@ -39,6 +42,9 @@ const ProdukDetail = ({route}) => {
     },
     [user],
   );
+  const source = {
+    html: description,
+  };
 
   return (
     <Block safe marginTop={sizes.xs}>
@@ -50,53 +56,27 @@ const ProdukDetail = ({route}) => {
         <Block flex={0}>
           <Image
             background
-            resizeMode="contain"
+            resizeMode="cover"
             height={sizes.xxl * 6}
             padding={sizes.s}
-            radius={sizes.s}
-            source={assets.background}>
+            source={{uri: foto}}>
             <Block flex={0} align="flex-end">
-              <TouchableOpacity
-                onPress={() => {
-                  navigation.navigate('Screens', {
-                    screen: 'Login',
-                  });
-                }}>
-                <Image
-                  width={64}
-                  height={64}
-                  marginBottom={sizes.sm}
-                  source={{uri: user?.avatar}}
-                />
-              </TouchableOpacity>
-              <TouchableOpacity onPress={() => {}}>
-                <Image
-                  width={64}
-                  height={64}
-                  marginBottom={sizes.sm}
-                  source={{uri: user?.avatar}}
-                />
-              </TouchableOpacity>
-              <TouchableOpacity onPress={() => {}}>
-                <Image
-                  width={64}
-                  height={64}
-                  marginBottom={sizes.sm}
-                  source={{uri: user?.avatar}}
-                />
-              </TouchableOpacity>
-              <TouchableOpacity onPress={() => {}}>
-                <Image
-                  width={64}
-                  height={64}
-                  marginBottom={sizes.sm}
-                  source={{uri: user?.avatar}}
-                />
-              </TouchableOpacity>
+              {image?.map((item, index) => (
+                <TouchableOpacity
+                  onPress={() => setFoto(item.image)}
+                  key={`card-${index}`}>
+                  <Image
+                    width={64}
+                    height={64}
+                    marginBottom={sizes.sm}
+                    source={{uri: item?.image}}
+                  />
+                </TouchableOpacity>
+              ))}
             </Block>
           </Image>
 
-          {/* profile: stats */}
+          {/* product: stats */}
           <Block
             flex={0}
             // radius={sizes.s}
@@ -114,11 +94,12 @@ const ProdukDetail = ({route}) => {
               // justify="space-evenly"
               renderToHardwareTextureAndroid>
               <Text h5 left={1} marginTop={sizes.s} marginLeft={sizes.s}>
-                {namaProduk}
+                {name}
               </Text>
               <Block row padding={sizes.s}>
                 <Block align="flex-start">
-                  <Text h5>Rp. {numeral(100000).format('0,0[.]00')}</Text>
+                  <Text h5>Rp. {numeral(price).format('0,0[.]00')},00</Text>
+                  <Text>Stok: {stock}</Text>
                 </Block>
                 <Block align="flex-end">
                   <Text h5>{(user?.stats?.following || 0) / 1000}x</Text>
@@ -128,17 +109,17 @@ const ProdukDetail = ({route}) => {
             </Block>
           </Block>
 
-          {/* profile: about me */}
+          {/* product: about me */}
           <Block paddingHorizontal={sizes.sm}>
             <Text h5 semibold marginBottom={sizes.s} marginTop={sizes.sm}>
-              {t('profile.aboutMe')}
+              {t('product.description')}:
             </Text>
-            <Text p lineHeight={26}>
-              {user?.about}
+            <Text p lineHeight={26} marginTop={sizes.s}>
+              <RenderHtml contentWidth={width} source={source} />
             </Text>
           </Block>
 
-          {/* profile: photo album */}
+          {/* product: photo album */}
           <Block paddingHorizontal={sizes.sm} marginTop={sizes.s}>
             <Block row align="center" justify="space-between">
               <Text h5 semibold>

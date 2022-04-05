@@ -44,6 +44,7 @@
     "send": "Send",
     "sold": "Sold",
     "top": "Top Seller",
+    "empty": "Data Not Found",
     "guests": {
       "one": "1 guest",
       "other": "{{count}} guests",
@@ -89,6 +90,7 @@
   },
   "menu": {
     "started": "Getting Started",
+    "logout": "Logout",
     "documentation": "Documentation"
   },
   "home": {
@@ -110,6 +112,9 @@
     "followers": "Followers",
     "following": "Following",
     "aboutMe": "About me"
+  },
+  "product":{
+    "description": "Description"
   },
   "pro": {
     "title": "Soft UI PRO",

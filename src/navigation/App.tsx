@@ -2,10 +2,17 @@ import React, {useEffect} from 'react';
 import {Platform, StatusBar} from 'react-native';
 import {useFonts} from 'expo-font';
 import AppLoading from 'expo-app-loading';
-import {NavigationContainer, DefaultTheme} from '@react-navigation/native';
+import {
+  NavigationContainer,
+  DefaultTheme,
+  useNavigation,
+} from '@react-navigation/native';
 
 import Menu from './Menu';
 import {useData, ThemeProvider, TranslationProvider} from '../hooks';
+import {Provider, useDispatch} from 'react-redux';
+import {onRestoreToken, store} from '../redux';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export default () => {
   const {isDark, theme, setTheme} = useData();

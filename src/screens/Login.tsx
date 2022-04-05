@@ -1,67 +1,90 @@
 import React, {useCallback, useEffect, useState} from 'react';
-import {Linking, Platform} from 'react-native';
+import {ActivityIndicator, Linking, Platform} from 'react-native';
 import {useNavigation} from '@react-navigation/core';
 
 import {useData, useTheme, useTranslation} from '../hooks/';
 import * as regex from '../constants/regex';
 import {Block, Button, Input, Image, Text, Checkbox} from '../components/';
+import {
+  ApplicationState,
+  onLoading,
+  onLogin,
+  onRestoreToken,
+  onSetFormLogin,
+} from '../redux';
+import {useSelector, useDispatch} from 'react-redux';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const isAndroid = Platform.OS === 'android';
 
-interface IRegistration {
-  name: string;
+interface ILogin {
   email: string;
   password: string;
-  agreed: boolean;
 }
-interface IRegistrationValidation {
-  name: boolean;
+interface ILoginValidation {
   email: boolean;
   password: boolean;
-  agreed: boolean;
 }
 
 const Login = () => {
   const {isDark} = useData();
   const {t} = useTranslation();
   const navigation = useNavigation();
-  const [isValid, setIsValid] = useState<IRegistrationValidation>({
-    name: false,
+  const dispatch = useDispatch();
+  const {form, isLogin, token, error, loading} = useSelector(
+    (state: ApplicationState) => state.AuthReducer,
+  );
+  // const {access_token} = user;
+
+  const [isValid, setIsValid] = useState<ILoginValidation>({
     email: false,
     password: false,
-    agreed: false,
   });
-  const [registration, setRegistration] = useState<IRegistration>({
-    name: '',
-    email: '',
-    password: '',
-    agreed: false,
-  });
+
+  const restoreToken = async () => {
+    // setTimeout(async () => {
+    try {
+      const token = await AsyncStorage.getItem('@token-set');
+      if (token !== null) {
+        // value previously stored
+        console.log('ambil token:', JSON.parse(token));
+        dispatch(onRestoreToken(JSON.parse(token)));
+        // navigation.navigate('Home');
+      }
+    } catch (error) {
+      console.warn(error);
+      console.log(error);
+    }
+    // }, 1000);
+  };
+  useEffect(() => {
+    restoreToken();
+  }, []);
+
   const {assets, colors, gradients, sizes} = useTheme();
 
-  const handleChange = useCallback(
-    (value) => {
-      setRegistration((state) => ({...state, ...value}));
-    },
-    [setRegistration],
-  );
+  const handleChange = (value, inputType) => {
+    // console.log(form, isLogin);
+    dispatch(onSetFormLogin(value, inputType));
+  };
 
-  const handleSignUp = useCallback(() => {
-    if (!Object.values(isValid).includes(false)) {
-      /** send/save registratin data */
-      console.log('handleSignUp', registration);
-    }
-  }, [isValid, registration]);
+  const handleLogin = () => {
+    // if (!Object.values(isValid).includes(false)) {
+    //   /** send/save registratin data */
+    //   console.log('handleSignUp', registration);
+    // }
+    dispatch(onLoading());
+    dispatch(onLogin(form.email, form.password));
+  };
 
   useEffect(() => {
     setIsValid((state) => ({
       ...state,
-      name: regex.name.test(registration.name),
-      email: regex.email.test(registration.email),
-      password: regex.password.test(registration.password),
-      agreed: registration.agreed,
+      email: regex.email.test(form.email),
+      password: regex.password.test(form.password),
+      // agreed: login.agreed,
     }));
-  }, [registration, setIsValid]);
+  }, [form, setIsValid]);
 
   return (
     <Block safe marginTop={sizes.md}>
@@ -74,7 +97,7 @@ const Login = () => {
             radius={sizes.cardRadius}
             source={assets.background}
             height={sizes.height * 0.3}>
-            <Button
+            {/* <Button
               row
               flex={0}
               justify="flex-start"
@@ -90,7 +113,7 @@ const Login = () => {
               <Text p white marginLeft={sizes.s}>
                 {t('common.goBack')}
               </Text>
-            </Button>
+            </Button> */}
 
             <Text h4 center white marginBottom={sizes.md}>
               {t('login.title')}
@@ -182,9 +205,10 @@ const Login = () => {
                   label={t('common.email')}
                   keyboardType="email-address"
                   placeholder={t('common.emailPlaceholder')}
-                  success={Boolean(registration.email && isValid.email)}
-                  danger={Boolean(registration.email && !isValid.email)}
-                  onChangeText={(value) => handleChange({email: value})}
+                  success={Boolean(form.email && isValid.email)}
+                  danger={Boolean(form.email && !isValid.email)}
+                  onChangeText={(value) => handleChange(value, 'email')}
+                  value={form.email}
                 />
                 <Input
                   secureTextEntry
@@ -192,32 +216,47 @@ const Login = () => {
                   marginBottom={sizes.m}
                   label={t('common.password')}
                   placeholder={t('common.passwordPlaceholder')}
-                  onChangeText={(value) => handleChange({password: value})}
-                  success={Boolean(registration.password && isValid.password)}
-                  danger={Boolean(registration.password && !isValid.password)}
+                  onChangeText={(value) => handleChange(value, 'password')}
+                  value={form.password}
+                  success={Boolean(form.password && isValid.password)}
+                  danger={Boolean(form.password && !isValid.password)}
                 />
               </Block>
               {/* checkbox terms */}
-              <Button
-                gradient={gradients.primary}
-                outlined
-                shadow={!isAndroid}
-                marginVertical={sizes.s}
-                marginHorizontal={sizes.sm}
-                onPress={() => navigation.navigate('Pro')}>
-                <Text bold white transform="uppercase">
-                  {t('common.signin')}
-                </Text>
-              </Button>
-              <Button
-                onPress={handleSignUp}
-                marginVertical={sizes.s}
-                marginHorizontal={sizes.sm}
-                color={colors.secondary}>
-                <Text bold white transform="uppercase">
-                  {t('common.signup')}
-                </Text>
-              </Button>
+              {loading ? (
+                <ActivityIndicator
+                  size="large"
+                  style={{flex: 1, justifyContent: 'center'}}
+                  color={colors.primary}
+                />
+              ) : (
+                <>
+                  <Button
+                    onPress={handleLogin}
+                    gradient={gradients.primary}
+                    outlined
+                    shadow={!isAndroid}
+                    marginVertical={sizes.s}
+                    marginHorizontal={sizes.sm}>
+                    <Text bold white transform="uppercase">
+                      {t('common.signin')}
+                    </Text>
+                  </Button>
+                  <Button
+                    marginVertical={sizes.s}
+                    marginHorizontal={sizes.sm}
+                    color={colors.secondary}
+                    onPress={() => {
+                      navigation.navigate('Screens', {
+                        screen: 'Register',
+                      });
+                    }}>
+                    <Text bold white transform="uppercase">
+                      {t('common.signup')}
+                    </Text>
+                  </Button>
+                </>
+              )}
             </Block>
           </Block>
         </Block>

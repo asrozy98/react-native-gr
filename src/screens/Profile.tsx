@@ -1,14 +1,18 @@
-import React, {useCallback} from 'react';
+import React, {useCallback, useEffect} from 'react';
 import {Platform, Linking} from 'react-native';
 import {Ionicons} from '@expo/vector-icons';
 import {useNavigation} from '@react-navigation/core';
 
 import {Block, Button, Image, Text} from '../components/';
 import {useData, useTheme, useTranslation} from '../hooks/';
+import {ApplicationState, onProfile} from '../redux';
+import {useDispatch, useSelector} from 'react-redux';
 
 const isAndroid = Platform.OS === 'android';
 
 const Profile = () => {
+  const auth = useSelector((state: ApplicationState) => state.AuthReducer);
+  const dispatch = useDispatch();
   const {user} = useData();
   const {t} = useTranslation();
   const navigation = useNavigation();
@@ -21,6 +25,9 @@ const Profile = () => {
   const IMAGE_VERTICAL_MARGIN =
     (sizes.width - (IMAGE_VERTICAL_SIZE + sizes.sm) * 2) / 2;
 
+  useEffect(() => {
+    dispatch(onProfile(auth.token));
+  }, [auth.data]);
   const handleSocialLink = useCallback(
     (type: 'twitter' | 'dribbble') => {
       const url =
@@ -77,7 +84,7 @@ const Profile = () => {
                 source={{uri: user?.avatar}}
               />
               <Text h5 center white>
-                {user?.name}
+                {auth.data?.name}
               </Text>
               <Text p center white>
                 {user?.department}
