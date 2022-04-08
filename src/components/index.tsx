@@ -7,7 +7,8 @@ import Switch from './Switch';
 import Checkbox from './Checkbox';
 import Image from './Image';
 import Article from './Article';
-import Product from './Product';
+import Produk from './Produk';
+import ListItem from './ListItem';
 
 export {
   Block,
@@ -18,6 +19,7 @@ export {
   Checkbox,
   Image,
   Article,
-  Product,
+  Produk,
+  ListItem,
   Modal,
 };

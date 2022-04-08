@@ -33,15 +33,13 @@ const Produk = ({item}) => {
       width={isHorizontal ? CARD_WIDTH * 2 + sizes.sm : CARD_WIDTH}>
       <TouchableOpacity
         onPress={() => {
-          navigation.navigate('Screens', {
-            screen: 'ProdukDetail',
-            params: {
-              name: item.product_name,
-              image: item.image,
-              price: item.price,
-              stock: item.stock,
-              description: item.description,
-            },
+          navigation.push('ProdukDetail', {
+            name: item.product_name,
+            image: item.image,
+            price: item.price,
+            stock: item.stock,
+            category_id: item.category_id,
+            description: item.description,
           });
         }}>
         <Image

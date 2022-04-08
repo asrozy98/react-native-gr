@@ -67,7 +67,8 @@
     "settings": "Settings",
     "register": "Create account",
     "login": "Login",
-    "extra": "Extra - Automotive"
+    "extra": "Extra - Automotive",
+    "category": "Product Category: "
   },
   "navigation": {
     "home": "Gemah Ripah",
@@ -86,7 +87,14 @@
     "register": "Register",
     "login": "Login",
     "extra": "Automotive",
-    "shopping": "Shopping Cart"
+    "shopping": "Shopping Cart",
+    "category": "All Category",
+    "changeProfile": "Change Profil",
+    "changePassword": "Change Password",
+    "listTransaction": "List Transaction",
+    "address": "Address",
+    "liveChat": "Live Chat",
+    "help": "Help"
   },
   "menu": {
     "started": "Getting Started",
@@ -114,7 +122,9 @@
     "aboutMe": "About me"
   },
   "product":{
-    "description": "Description"
+    "title": "Product",
+    "description": "Description",
+    "buyNow": "Buy now"
   },
   "pro": {
     "title": "Soft UI PRO",

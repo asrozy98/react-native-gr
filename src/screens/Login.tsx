@@ -47,7 +47,6 @@ const Login = () => {
       const token = await AsyncStorage.getItem('@token-set');
       if (token !== null) {
         // value previously stored
-        console.log('ambil token:', JSON.parse(token));
         dispatch(onRestoreToken(JSON.parse(token)));
         // navigation.navigate('Home');
       }

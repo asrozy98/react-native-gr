@@ -1,24 +1,42 @@
-import React, {useCallback, useState} from 'react';
-import {Platform, Linking, useWindowDimensions} from 'react-native';
-import {Ionicons} from '@expo/vector-icons';
+import React, {useCallback, useEffect, useState} from 'react';
+import {
+  Platform,
+  Linking,
+  useWindowDimensions,
+  FlatList,
+  ActivityIndicator,
+} from 'react-native';
+import {FontAwesome5, Ionicons} from '@expo/vector-icons';
 import {useNavigation} from '@react-navigation/core';
 
 import {Block, Button, Image, Text} from '../components/';
 import {useData, useTheme, useTranslation} from '../hooks/';
 import numeral from 'numeral';
 import {TouchableOpacity} from 'react-native-gesture-handler';
-import RenderHtml from 'react-native-render-html';
+import RenderHtml, {
+  HTMLContentModel,
+  HTMLElementModel,
+} from 'react-native-render-html';
+import {ApplicationState} from '../redux';
+import {useDispatch, useSelector} from 'react-redux';
+import Produk from '../components/Produk';
+import {onKategoriProduk} from '../redux/actions/produkActions';
 
 const isAndroid = Platform.OS === 'android';
 
 const ProdukDetail = ({route}) => {
   const {width} = useWindowDimensions();
-  const {name, image, price, stock, description} = route.params;
+  const dispatch = useDispatch();
+  const {name, image, price, stock, description, category_id} = route.params;
+  const auth = useSelector((state: ApplicationState) => state.AuthReducer);
   const [foto, setFoto] = useState(image[0].image);
   const {user} = useData();
   const {t} = useTranslation();
   const navigation = useNavigation();
-  const {assets, colors, sizes} = useTheme();
+  const {assets, gradients, colors, sizes} = useTheme();
+  const {katData, loading} = useSelector(
+    (state: ApplicationState) => state.ProdukReducer,
+  );
 
   const IMAGE_SIZE = (sizes.width - (sizes.padding + sizes.sm) * 2) / 3;
   const IMAGE_VERTICAL_SIZE =
@@ -26,6 +44,10 @@ const ProdukDetail = ({route}) => {
   const IMAGE_MARGIN = (sizes.width - IMAGE_SIZE * 3 - sizes.padding * 2) / 2;
   const IMAGE_VERTICAL_MARGIN =
     (sizes.width - (IMAGE_VERTICAL_SIZE + sizes.sm) * 2) / 2;
+
+  useEffect(() => {
+    dispatch(onKategoriProduk(auth.token, category_id, 4));
+  }, [category_id]);
 
   const handleSocialLink = useCallback(
     (type: 'twitter' | 'dribbble') => {
@@ -43,7 +65,18 @@ const ProdukDetail = ({route}) => {
     [user],
   );
   const source = {
-    html: description,
+    html: `<blue-circle>${description}</blue-circle>`,
+  };
+
+  const customHTMLElementModels = {
+    'blue-circle': HTMLElementModel.fromCustomModel({
+      tagName: 'blue-circle',
+      mixedUAStyles: {
+        backgroundColor: colors.card,
+        color: colors.text,
+      },
+      contentModel: HTMLContentModel.block,
+    }),
   };
 
   return (
@@ -64,7 +97,7 @@ const ProdukDetail = ({route}) => {
               {image?.map((item, index) => (
                 <TouchableOpacity
                   onPress={() => setFoto(item.image)}
-                  key={`card-${index}`}>
+                  key={`image-${index}`}>
                   <Image
                     width={64}
                     height={64}
@@ -110,57 +143,74 @@ const ProdukDetail = ({route}) => {
           </Block>
 
           {/* product: about me */}
-          <Block paddingHorizontal={sizes.sm}>
+          <Block paddingHorizontal={sizes.sm} color={colors.card}>
             <Text h5 semibold marginBottom={sizes.s} marginTop={sizes.sm}>
               {t('product.description')}:
             </Text>
-            <Text p lineHeight={26} marginTop={sizes.s}>
-              <RenderHtml contentWidth={width} source={source} />
-            </Text>
+            <RenderHtml
+              contentWidth={width}
+              source={source}
+              customHTMLElementModels={customHTMLElementModels}
+            />
           </Block>
 
-          {/* product: photo album */}
+          {/* product: product similar */}
           <Block paddingHorizontal={sizes.sm} marginTop={sizes.s}>
             <Block row align="center" justify="space-between">
               <Text h5 semibold>
                 {t('common.album')}
               </Text>
               <Button>
-                <Text p primary semibold>
+                <Text p semibold>
                   {t('common.viewall')}
                 </Text>
               </Button>
             </Block>
             <Block row justify="space-between" wrap="wrap">
-              <Image
-                resizeMode="cover"
-                source={assets?.photo1}
-                style={{
-                  width: IMAGE_VERTICAL_SIZE + IMAGE_MARGIN / 2,
-                  height: IMAGE_VERTICAL_SIZE * 2 + IMAGE_VERTICAL_MARGIN,
-                }}
-              />
-              <Block marginLeft={sizes.m}>
-                <Image
-                  resizeMode="cover"
-                  source={assets?.photo2}
-                  marginBottom={IMAGE_VERTICAL_MARGIN}
-                  style={{
-                    height: IMAGE_VERTICAL_SIZE,
-                    width: IMAGE_VERTICAL_SIZE,
-                  }}
+              {loading ? (
+                <ActivityIndicator
+                  size="large"
+                  // style={{flex: 1, justifyContent: 'center'}}
+                  color={colors.primary}
                 />
-                <Image
-                  resizeMode="cover"
-                  source={assets?.photo3}
-                  style={{
-                    height: IMAGE_VERTICAL_SIZE,
-                    width: IMAGE_VERTICAL_SIZE,
-                  }}
-                />
-              </Block>
+              ) : (
+                katData?.map((item, index) => (
+                  <Produk item={item} key={`kat-${index}`} />
+                ))
+              )}
             </Block>
           </Block>
+        </Block>
+      </Block>
+      <Block
+        row
+        justify="space-between"
+        align="center"
+        height={sizes.xxl}
+        width={width}
+        bottom={0}
+        color={colors.gray}
+        position="absolute">
+        <Block>
+          <Button
+            gradient={gradients.secondary}
+            onPress={() => navigation.navigate('Cart')}>
+            <FontAwesome5 name="heart" size={24} color={colors.white} />
+          </Button>
+        </Block>
+        <Block>
+          <Button onPress={() => navigation.navigate('Cart')}>
+            <FontAwesome5 name="cart-plus" size={24} color={colors.white} />
+          </Button>
+        </Block>
+        <Block>
+          <Button
+            gradient={gradients.primary}
+            onPress={() => navigation.navigate('Cart')}>
+            <Text white p bold>
+              {t('product.buyNow')}
+            </Text>
+          </Button>
         </Block>
       </Block>
     </Block>

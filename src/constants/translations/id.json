@@ -65,28 +65,36 @@
     "rental": "Rental",
     "profile": "Profil",
     "settings": "Pengaturan",
-    "register": "Buat akun",
+    "register": "Buat Akun",
     "login": "Login",
-    "extra": "Extra - Automotive"
+    "extra": "Tambahan - Otomotif",
+    "category": "Produk Kategori: "
   },
   "navigation": {
     "home": "Gemah Ripah",
     "components": "Components",
     "articles": "Soft UI",
     "rentals": "Soft UI",
-    "rental": "Best Deal",
+    "rental": "Penawaran Terbaik",
     "booking": "Pemesanan",
     "chat": "Chat",
     "profile": "Profil",
-    "settings": "Settings",
+    "settings": "Pengaturan",
     "notifications": "Pemberitauan",
     "agreement": "Perjanjian Pengguna",
-    "about": "Tenteang",
+    "about": "Tentang",
     "privacy": "Privasi",
     "register": "Daftar",
     "login": "Login",
-    "extra": "Automotive",
-    "shopping": "Keranjang"
+    "extra": "Otomotif",
+    "shopping": "Keranjang",
+    "category": "Semua Kategori",
+    "changeProfile": "Edit Profil",
+    "changePassword": "Edit Password",
+    "listTransaction": "Daftar Transaksi",
+    "address": "Alamat",
+    "liveChat": "Live Chat",
+    "help": "Bantuan"
   },
   "menu": {
     "started": "Mulai",
@@ -114,7 +122,9 @@
     "aboutMe": "Tentang saya"
   },
   "product":{
-    "description": "Deskripsi"
+    "title": "Produk",
+    "description": "Deskripsi",
+    "buyNow": "Beli Sekarang"
   },
   "pro": {
     "title": "Soft UI PRO",

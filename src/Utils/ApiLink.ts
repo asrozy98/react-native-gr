@@ -8,7 +8,7 @@ const ApiLink = {
     REGISTER : BASE_URL+'/auth/register',
     PROFILE : BASE_URL+'/profile',
 
-    KATEGORI : BASE_URL+'/kategori',
+    KATEGORI : BASE_URL+'/product/category',
     PRODUK : BASE_URL+'/product',
 }
 

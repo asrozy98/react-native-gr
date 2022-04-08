@@ -85,6 +85,7 @@ const DrawerContent = (props: DrawerContentComponentProps) => {
   // screen list for Drawer menu
   const authScreens = [
     {name: t('screens.home'), to: 'Home', icon: assets.home},
+    {name: t('screens.category'), to: 'Kategori', icon: assets.logo},
     {name: t('screens.components'), to: 'Components', icon: assets.components},
     {name: t('screens.articles'), to: 'Articles', icon: assets.document},
     {name: t('screens.rental'), to: 'Pro', icon: assets.rental},

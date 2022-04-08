@@ -1,4 +1,3 @@
-import { ParamModel } from './produkActions';
 import axios from 'axios';
 import ApiLink from '../../Utils/ApiLink';
 import { Dispatch } from 'react';
@@ -18,6 +17,13 @@ export interface ProdukListAction {
     loading: boolean;
 }
 
+export interface OnKategoriProdukAction {
+    readonly type: 'ON_LIST_KATEGORI_PRODUK';
+    // data: any;
+    katData: [];
+    loading: boolean;
+}
+
 export interface OnLoading{
     readonly type: 'ON_LOADING';
     loading: boolean;
@@ -29,7 +35,7 @@ export interface ProdukListErrorAction {
     loading: boolean;
 }
 
-export type ProdukAction = ProdukListAction | ProdukListErrorAction | OnLoading;
+export type ProdukAction = ProdukListAction | ProdukListErrorAction | OnLoading |OnKategoriProdukAction;
 
 export const onProduk=(token: string|null,kategori: number|null,cari: string|null,page: number|null,)=>{
   return async(dispatch:Dispatch<ProdukAction>)=>{
@@ -68,6 +74,42 @@ export const onProduk=(token: string|null,kategori: number|null,cari: string|nul
         }
     }
 };
+
+export const onKategoriProduk=(token: string|null,kategori: number|null,page: number|null,)=>{
+    return async(dispatch:Dispatch<ProdukAction>)=>{
+  
+          try {
+              const response = await axios.get(ApiLink.PRODUK,{
+                  headers:{
+                      Authorization:`Bearer ${token}`
+                  },params:{
+                      kategori_id:kategori,
+                      perPage:page,
+                  }
+              })
+          
+              if(!response){
+                  dispatch({
+                      type:'ON_LIST_PRODUK_ERROR',
+                      message:'Produk with API error',
+                      loading:false,
+                  })  
+              }else{
+                  dispatch({
+                      type:'ON_LIST_KATEGORI_PRODUK',
+                      katData:response.data.data,
+                      loading:false
+                  }) 
+              }
+          } catch (error) {
+              dispatch({
+                  type:'ON_LIST_PRODUK_ERROR',
+                  message:error,
+                  loading:false,
+              }) 
+          }
+      }
+  };
 
 export const onLoading=()=>{
     return{

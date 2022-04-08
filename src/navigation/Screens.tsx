@@ -10,6 +10,8 @@ import {
   Login,
   Pro,
   ProdukDetail,
+  Kategori,
+  KategoriDetail,
 } from '../screens';
 import {useScreenOptions, useTheme, useTranslation} from '../hooks';
 import {ApplicationState, store} from '../redux';
@@ -45,6 +47,20 @@ export default () => {
               name="Home"
               component={Home}
               options={{title: t('navigation.home')}}
+            />
+
+            <Stack.Screen
+              name="Kategori"
+              component={Kategori}
+              options={{title: t('navigation.category')}}
+            />
+
+            <Stack.Screen
+              name="KategoriDetail"
+              component={KategoriDetail}
+              options={({route}) => ({
+                title: t('screens.category') + route.params.name,
+              })}
             />
 
             <Stack.Screen

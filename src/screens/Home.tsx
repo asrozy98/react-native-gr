@@ -1,40 +1,35 @@
 import React, {useCallback, useEffect, useState} from 'react';
 
 import {useData, useTheme, useTranslation} from '../hooks/';
-import {Block, Button, Image, Input, Product, Text} from '../components/';
+import {Block, Button, Image, Input, Text} from '../components/';
 import Produk from '../components/Produk';
 import {useDispatch, useSelector} from 'react-redux';
 import {ApplicationState} from '../redux';
 import {onProduk, onLoading} from '../redux/actions/produkActions';
 import {ActivityIndicator, FlatList} from 'react-native';
+import {onListKategori} from '../redux/actions/kategoriActions';
+import {useNavigation} from '@react-navigation/native';
 
 const Home = () => {
   const {t} = useTranslation();
-  const [tab, setTab] = useState<number>(0);
   const dispatch = useDispatch();
-  const {following, trending} = useData();
-  const [products, setProducts] = useState(following);
+  const navigation = useNavigation();
   const [cari, setCari] = useState(null);
   const [kategori, setKategori] = useState(null);
   const [page, setPage] = useState(10);
   const {assets, colors, fonts, gradients, sizes} = useTheme();
   const auth = useSelector((state: ApplicationState) => state.AuthReducer);
+  const dataKat = useSelector(
+    (state: ApplicationState) => state.KategoriReducer,
+  );
   const {data, count, loading} = useSelector(
     (state: ApplicationState) => state.ProdukReducer,
   );
 
   useEffect(() => {
+    dispatch(onListKategori(auth.token, 5));
     dispatch(onProduk(auth.token, kategori, cari, page));
-    console.log(data);
   }, [kategori, cari, page]);
-
-  const handleProducts = useCallback(
-    (tab: number) => {
-      setTab(tab);
-      setProducts(tab === 0 ? following : trending);
-    },
-    [following, trending, setTab, setProducts],
-  );
   const setPerPage = () => {
     dispatch(onLoading());
     if (page < count) {
@@ -56,71 +51,91 @@ const Home = () => {
       </Block>
 
       {/* toggle products list */}
-      {/* <Block
+      <Block
         row
         flex={0}
+        wrap={'wrap'}
         align="center"
-        justify="center"
+        justify="space-between"
         color={colors.card}
-        paddingBottom={sizes.sm}>
-        <Button onPress={() => handleProducts(0)}>
-          <Block row align="center">
-            <Block
-              flex={0}
-              radius={6}
-              align="center"
-              justify="center"
-              marginRight={sizes.s}
-              width={sizes.socialIconSize}
-              height={sizes.socialIconSize}
-              gradient={gradients?.[tab === 0 ? 'primary' : 'secondary']}>
-              <Image source={assets.extras} color={colors.white} radius={0} />
-            </Block>
-            <Text p font={fonts?.[tab === 0 ? 'medium' : 'normal']}>
-              {t('home.following')}
-            </Text>
+        paddingHorizontal={sizes.sm}
+        paddingBottom={sizes.s}>
+        {loading ? (
+          <Block justify="center">
+            <ActivityIndicator size="large" color={colors.primary} />
           </Block>
-        </Button>
-        <Block
-          gray
-          flex={0}
-          width={1}
-          marginHorizontal={sizes.sm}
-          height={sizes.socialIconSize}
-        />
-        <Button onPress={() => handleProducts(1)}>
-          <Block row align="center">
-            <Block
-              flex={0}
-              radius={6}
-              align="center"
-              justify="center"
-              marginRight={sizes.s}
-              width={sizes.socialIconSize}
-              height={sizes.socialIconSize}
-              gradient={gradients?.[tab === 1 ? 'primary' : 'secondary']}>
-              <Image
-                radius={0}
-                color={colors.white}
-                source={assets.documentation}
-              />
-            </Block>
-            <Text p font={fonts?.[tab === 1 ? 'medium' : 'normal']}>
-              {t('home.trending')}
-            </Text>
-          </Block>
-        </Button>
-      </Block> */}
+        ) : (
+          <>
+            {dataKat.data?.map((item, key) => (
+              <Button onPress={() => setKategori(item.id)} key={`kat-${key}`}>
+                <Block row align="center">
+                  <Block
+                    flex={0}
+                    radius={6}
+                    align="center"
+                    justify="center"
+                    marginRight={sizes.s}
+                    width={sizes.socialIconSize}
+                    height={sizes.socialIconSize}>
+                    <Image
+                      source={{uri: item.icon}}
+                      radius={0}
+                      style={{
+                        height: sizes.m,
+                        width: sizes.m,
+                      }}
+                    />
+                  </Block>
+                  <Text
+                    p
+                    font={fonts?.[kategori === item.id ? 'medium' : 'normal']}
+                    color={colors?.[kategori === item.id ? 'primary' : 'text']}>
+                    {item.nama}
+                  </Text>
+                </Block>
+              </Button>
+            ))}
+            <Button
+              onPress={() =>
+                navigation.navigate('Screens', {screen: 'Kategori'})
+              }
+              key={`kat-00`}>
+              <Block row align="center">
+                <Block
+                  flex={0}
+                  radius={6}
+                  align="center"
+                  justify="center"
+                  marginRight={sizes.s}
+                  width={sizes.socialIconSize}
+                  height={sizes.socialIconSize}>
+                  <Image
+                    source={assets.logo}
+                    radius={0}
+                    color={colors?.[kategori === null ? 'primary' : 'text']}
+                    style={{
+                      height: sizes.m,
+                      width: sizes.m,
+                    }}
+                  />
+                </Block>
+                <Text
+                  p
+                  font={fonts?.[kategori === null ? 'medium' : 'normal']}
+                  color={colors?.[kategori === null ? 'primary' : 'text']}>
+                  Semua
+                </Text>
+              </Block>
+            </Button>
+          </>
+        )}
+      </Block>
 
       {/* products list */}
       <Block
         paddingHorizontal={sizes.padding}
         contentContainerStyle={{paddingBottom: sizes.l}}>
         <Block justify="center" marginTop={sizes.sm}>
-          {/* {data &&
-            data?.map((item, index) => (
-              <Produk item={item} key={`card-${index}`} />
-            ))} */}
           {data && (
             <FlatList
               data={data}
@@ -133,11 +148,7 @@ const Home = () => {
             />
           )}
           {loading ? (
-            <ActivityIndicator
-              size="large"
-              // style={{flex: 1, justifyContent: 'center'}}
-              color={colors.primary}
-            />
+            <ActivityIndicator size="large" color={colors.primary} />
           ) : null}
         </Block>
       </Block>

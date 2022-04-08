@@ -6,6 +6,7 @@ type AuthState = {
         email:string;
         password:string;
     };
+    data: [];
     isLogin: boolean;
     token: string | null;
     error: string | undefined;
@@ -18,6 +19,7 @@ const intialState = {
         email:'',
         password:''
     },
+    data:[],
     isLogin: false,
     token: null,
     error: undefined,
