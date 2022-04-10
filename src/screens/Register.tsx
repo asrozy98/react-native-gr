@@ -5,60 +5,90 @@ import {useNavigation} from '@react-navigation/core';
 import {useData, useTheme, useTranslation} from '../hooks/';
 import * as regex from '../constants/regex';
 import {Block, Button, Input, Image, Text, Checkbox} from '../components/';
+import {useDispatch, useSelector} from 'react-redux';
+import {
+  ApplicationState,
+  onLoading,
+  onRegister,
+  onSetFormLogin,
+} from '../redux';
 
 const isAndroid = Platform.OS === 'android';
 
 interface IRegistration {
   name: string;
+  phone: string;
   email: string;
   password: string;
+  c_password: string;
   agreed: boolean;
 }
 interface IRegistrationValidation {
   name: boolean;
+  phone: boolean;
   email: boolean;
   password: boolean;
+  c_password: boolean;
   agreed: boolean;
 }
 
 const Register = () => {
   const {isDark} = useData();
+  const dispatch = useDispatch();
   const {t} = useTranslation();
   const navigation = useNavigation();
+  const {form, isLogin, token, error, loading} = useSelector(
+    (state: ApplicationState) => state.AuthReducer,
+  );
+
   const [isValid, setIsValid] = useState<IRegistrationValidation>({
     name: false,
+    phone: false,
     email: false,
     password: false,
+    c_password: false,
     agreed: false,
   });
   const [registration, setRegistration] = useState<IRegistration>({
     name: '',
+    phone: '',
     email: '',
     password: '',
+    c_password: '',
     agreed: false,
   });
   const {assets, colors, gradients, sizes} = useTheme();
 
-  const handleChange = useCallback(
-    (value) => {
-      setRegistration((state) => ({...state, ...value}));
-    },
-    [setRegistration],
-  );
+  const handleChange = (value, inputType) => {
+    // console.log(form, isLogin);
+    dispatch(onSetFormLogin(value, inputType));
+  };
 
   const handleSignUp = useCallback(() => {
-    if (!Object.values(isValid).includes(false)) {
-      /** send/save registratin data */
-      console.log('handleSignUp', registration);
-    }
+    // if (!Object.values(isValid).includes(false)) {
+    //   /** send/save registratin data */
+    //   console.log('handleSignUp', registration);
+    // }
+    dispatch(onLoading());
+    dispatch(
+      onRegister(
+        form.name,
+        form.phone,
+        form.email,
+        form.password,
+        form.c_password,
+      ),
+    );
   }, [isValid, registration]);
 
   useEffect(() => {
     setIsValid((state) => ({
       ...state,
-      name: regex.name.test(registration.name),
-      email: regex.email.test(registration.email),
-      password: regex.password.test(registration.password),
+      name: regex.name.test(form.name),
+      phone: regex.phone.test(form.phone),
+      email: regex.email.test(form.email),
+      password: regex.password.test(form.password),
+      c_password: regex.c_password.test(form.c_password),
       agreed: registration.agreed,
     }));
   }, [registration, setIsValid]);
@@ -181,9 +211,18 @@ const Register = () => {
                   marginBottom={sizes.m}
                   label={t('common.name')}
                   placeholder={t('common.namePlaceholder')}
-                  success={Boolean(registration.name && isValid.name)}
-                  danger={Boolean(registration.name && !isValid.name)}
-                  onChangeText={(value) => handleChange({name: value})}
+                  success={Boolean(form.name && isValid.name)}
+                  danger={Boolean(form.name && !isValid.name)}
+                  onChangeText={(value) => handleChange(value, 'name')}
+                />
+                <Input
+                  autoCapitalize="none"
+                  marginBottom={sizes.m}
+                  label={t('common.phone')}
+                  placeholder={t('common.phonePlaceholder')}
+                  success={Boolean(form.phone && isValid.phone)}
+                  danger={Boolean(form.phone && !isValid.name)}
+                  onChangeText={(value) => handleChange(value, 'phone')}
                 />
                 <Input
                   autoCapitalize="none"
@@ -191,9 +230,9 @@ const Register = () => {
                   label={t('common.email')}
                   keyboardType="email-address"
                   placeholder={t('common.emailPlaceholder')}
-                  success={Boolean(registration.email && isValid.email)}
-                  danger={Boolean(registration.email && !isValid.email)}
-                  onChangeText={(value) => handleChange({email: value})}
+                  success={Boolean(form.email && isValid.email)}
+                  danger={Boolean(form.email && !isValid.email)}
+                  onChangeText={(value) => handleChange(value, 'email')}
                 />
                 <Input
                   secureTextEntry
@@ -201,9 +240,19 @@ const Register = () => {
                   marginBottom={sizes.m}
                   label={t('common.password')}
                   placeholder={t('common.passwordPlaceholder')}
-                  onChangeText={(value) => handleChange({password: value})}
-                  success={Boolean(registration.password && isValid.password)}
-                  danger={Boolean(registration.password && !isValid.password)}
+                  onChangeText={(value) => handleChange(value, 'password')}
+                  success={Boolean(form.password && isValid.password)}
+                  danger={Boolean(form.password && !isValid.password)}
+                />
+                <Input
+                  secureTextEntry
+                  autoCapitalize="none"
+                  marginBottom={sizes.m}
+                  label={t('common.c_password')}
+                  placeholder={t('common.c_passwordPlaceholder')}
+                  onChangeText={(value) => handleChange(value, 'c_password')}
+                  success={Boolean(form.c_password && isValid.c_password)}
+                  danger={Boolean(form.c_password && !isValid.c_password)}
                 />
               </Block>
               {/* checkbox terms */}

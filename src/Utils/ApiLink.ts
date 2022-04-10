@@ -1,15 +1,21 @@
 const URL = 'https://koperasi.teknoloka.com';
+// const URL = 'http://127.0.0.1:8000';
 // const URL = 'https://178.128.92.250';
-const BASE_URL =URL+'/api/v1';
+const BaseUrl = URL + '/api/v1';
 
 
 const ApiLink = {
-    LOGIN : BASE_URL+'/auth/login',
-    REGISTER : BASE_URL+'/auth/register',
-    PROFILE : BASE_URL+'/profile',
+    Url: URL,
+    Login: BaseUrl + '/auth/login',
+    Register: BaseUrl + '/auth/register',
+    Profile: BaseUrl + '/profile',
 
-    KATEGORI : BASE_URL+'/product/category',
-    PRODUK : BASE_URL+'/product',
+    Kategori: BaseUrl + '/product/category',
+    KeranjangAdd: BaseUrl + '/product/cart/tambah',
+    KeranjangUpdate: BaseUrl + '/product/cart/update',
+    Keranjang: BaseUrl + '/product/cart',
+    KeranjangDelete: BaseUrl + '/product/cart/delete',
+    Produk: BaseUrl + '/product',
 }
 
 export default ApiLink;

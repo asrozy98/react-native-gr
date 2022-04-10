@@ -43,12 +43,12 @@ const Profile = () => {
       icon: 'account-circle',
     },
     {name: t('navigation.changePassword'), to: 'Register2', icon: 'lock-open'},
-    {name: t('navigation.listTransaction'), to: 'Register2', icon: 'lock-open'},
-    {name: t('navigation.address'), to: 'Register2', icon: 'lock-open'},
-    {name: t('navigation.liveChat'), to: 'Register2', icon: 'lock-open'},
-    {name: t('navigation.privacy'), to: 'Register2', icon: 'lock-open'},
-    {name: t('navigation.about'), to: 'Register2', icon: 'lock-open'},
-    {name: t('navigation.help'), to: 'Register2', icon: 'lock-open'},
+    {name: t('navigation.listTransaction'), to: 'Register2', icon: 'file-copy'},
+    {name: t('navigation.address'), to: 'Register2', icon: 'edit-location'},
+    {name: t('navigation.liveChat'), to: 'Register2', icon: 'chat'},
+    {name: t('navigation.privacy'), to: 'Register2', icon: 'privacy-tip'},
+    {name: t('navigation.about'), to: 'Register2', icon: 'contact-support'},
+    {name: t('navigation.help'), to: 'Register2', icon: 'help-outline'},
   ];
 
   return (
@@ -104,7 +104,7 @@ const Profile = () => {
                 justify="space-evenly"
                 width={sizes.width / 1.6}
                 height={sizes.xl}>
-                {auth.data?.verified === 0 && (
+                {auth.data?.status === 1 && (
                   // <Block
                   //   // shadow={false}
                   //   align="center">

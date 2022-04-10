@@ -26,7 +26,7 @@ export const onListKategori=(token:string|null,perPage:number|null)=>{
   return async(dispatch:Dispatch<KategoriAction>)=>{
 
         try {
-            const response = await axios.get(ApiLink.KATEGORI,{
+            const response = await axios.get(ApiLink.Kategori,{
                 headers:{
                     Authorization:`Bearer ${token}`
                 },params:{

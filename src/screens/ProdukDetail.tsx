@@ -21,13 +21,15 @@ import {ApplicationState} from '../redux';
 import {useDispatch, useSelector} from 'react-redux';
 import Produk from '../components/Produk';
 import {onKategoriProduk} from '../redux/actions/produkActions';
+import {onAddKeranjang} from '../redux/actions/keranjangActions';
 
 const isAndroid = Platform.OS === 'android';
 
 const ProdukDetail = ({route}) => {
   const {width} = useWindowDimensions();
   const dispatch = useDispatch();
-  const {name, image, price, stock, description, category_id} = route.params;
+  const {product_id, name, image, price, stock, description, category_id} =
+    route.params;
   const auth = useSelector((state: ApplicationState) => state.AuthReducer);
   const [foto, setFoto] = useState(image[0].image);
   const {user} = useData();
@@ -131,7 +133,7 @@ const ProdukDetail = ({route}) => {
               </Text>
               <Block row padding={sizes.s}>
                 <Block align="flex-start">
-                  <Text h5>Rp. {numeral(price).format('0,0[.]00')},00</Text>
+                  <Text h5>Rp. {numeral(price).format('0,0[.]00')}</Text>
                   <Text>Stok: {stock}</Text>
                 </Block>
                 <Block align="flex-end">
@@ -193,13 +195,17 @@ const ProdukDetail = ({route}) => {
         position="absolute">
         <Block>
           <Button
-            gradient={gradients.secondary}
+            // gradient={gradients.secondary}
             onPress={() => navigation.navigate('Cart')}>
             <FontAwesome5 name="heart" size={24} color={colors.white} />
           </Button>
         </Block>
         <Block>
-          <Button onPress={() => navigation.navigate('Cart')}>
+          <Button
+            onPress={() => {
+              dispatch(onAddKeranjang(auth.token, product_id));
+              // console.log(product_id, auth.token);
+            }}>
             <FontAwesome5 name="cart-plus" size={24} color={colors.white} />
           </Button>
         </Block>

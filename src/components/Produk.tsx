@@ -34,6 +34,7 @@ const Produk = ({item}) => {
       <TouchableOpacity
         onPress={() => {
           navigation.push('ProdukDetail', {
+            product_id: item.id,
             name: item.product_name,
             image: item.image,
             price: item.price,

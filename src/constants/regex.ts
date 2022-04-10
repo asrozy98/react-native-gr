@@ -3,6 +3,7 @@
  * accepted: letters & spaces, minimum 3 chars, maximum 15 chars
  */
 export const name: RegExp = /[a-zA-Z\ ]{3,15}/;
+export const phone: RegExp = /[0-9]{3,15}/;
 
 /*
  * email validation
@@ -17,4 +18,6 @@ export const email: RegExp = /^[^\s@]+@[^\s@]+\.([^\s@]{2,})+$/;
  * [0-9a-zA-Z]{6,}: at least 6 from the mentioned characters
  */
 export const password: RegExp =
+  /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])[0-9a-zA-Z]{6,}$/;
+export const c_password: RegExp =
   /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])[0-9a-zA-Z]{6,}$/;

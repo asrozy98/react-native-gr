@@ -56,9 +56,6 @@ const Login = () => {
     }
     // }, 1000);
   };
-  useEffect(() => {
-    restoreToken();
-  }, []);
 
   const {assets, colors, gradients, sizes} = useTheme();
 
@@ -77,6 +74,7 @@ const Login = () => {
   };
 
   useEffect(() => {
+    restoreToken();
     setIsValid((state) => ({
       ...state,
       email: regex.email.test(form.email),

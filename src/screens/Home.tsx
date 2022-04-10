@@ -4,11 +4,12 @@ import {useData, useTheme, useTranslation} from '../hooks/';
 import {Block, Button, Image, Input, Text} from '../components/';
 import Produk from '../components/Produk';
 import {useDispatch, useSelector} from 'react-redux';
-import {ApplicationState} from '../redux';
+import {ApplicationState, onProfile} from '../redux';
 import {onProduk, onLoading} from '../redux/actions/produkActions';
 import {ActivityIndicator, FlatList} from 'react-native';
 import {onListKategori} from '../redux/actions/kategoriActions';
 import {useNavigation} from '@react-navigation/native';
+import {onListKeranjang} from '../redux/actions/keranjangActions';
 
 const Home = () => {
   const {t} = useTranslation();
@@ -27,9 +28,13 @@ const Home = () => {
   );
 
   useEffect(() => {
+    dispatch(onListKeranjang(auth.token));
+    dispatch(onProfile(auth.token));
     dispatch(onListKategori(auth.token, 5));
     dispatch(onProduk(auth.token, kategori, cari, page));
+    console.log(data);
   }, [kategori, cari, page]);
+
   const setPerPage = () => {
     dispatch(onLoading());
     if (page < count) {
