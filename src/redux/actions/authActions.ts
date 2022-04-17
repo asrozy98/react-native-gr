@@ -85,7 +85,6 @@ export const onLogin = (email: string, password: string) => {
     return async (dispatch: Dispatch<AuthAction>) => {
 
         try {
-            `1`
             const response = await axios.post<AuthModel>(ApiLink.Login, {
                 email,
                 password
@@ -97,7 +96,7 @@ export const onLogin = (email: string, password: string) => {
                     error: response.data.message,
                     loading: false,
                 })
-                ToastAndroid.show(`${response.data.message}`, ToastAndroid.SHORT);
+                ToastAndroid.show(`Login: ${response.data.message}`, ToastAndroid.SHORT);
             } else {
                 dispatch({
                     type: 'ON_LOGIN',
@@ -117,7 +116,7 @@ export const onLogin = (email: string, password: string) => {
                 error: error,
                 loading: false,
             })
-            ToastAndroid.show(`${error}`, ToastAndroid.SHORT);
+            ToastAndroid.show(`Login: ${error}`, ToastAndroid.SHORT);
         }
     }
 };
@@ -144,7 +143,7 @@ export const onRegister = (name: string, phone: string, email: string, password:
                     error: response.data.message,
                     loading: false,
                 })
-                ToastAndroid.show(`${response.data.message}`, ToastAndroid.SHORT);
+                ToastAndroid.show(`Register: ${response.data.message}`, ToastAndroid.SHORT);
             } else {
                 dispatch({
                     type: 'ON_REGISTER',
@@ -164,7 +163,7 @@ export const onRegister = (name: string, phone: string, email: string, password:
                 error: error,
                 loading: false,
             })
-            ToastAndroid.show(`${error}`, ToastAndroid.SHORT);
+            ToastAndroid.show(`Register: ${error}`, ToastAndroid.SHORT);
         }
     }
 };
@@ -179,7 +178,6 @@ export const onLogout = () => {
 
 export const onRestoreToken = (token: string | null) => {
     if (token !== null) {
-        // value previously stored
         return { type: 'ON_RESTORE_TOKEN', isLogin: true, token: token };
     } else {
         return { type: 'ON_LOGOUT', form: { email: '', password: '' }, isLogin: false, token: null };
@@ -204,8 +202,6 @@ export const onProfile = (token: string | null) => {
             } else {
                 dispatch({
                     type: 'ON_PROFILE',
-                    // isLogin:true,
-                    // token:token,
                     data: response.data.data
                 })
             }

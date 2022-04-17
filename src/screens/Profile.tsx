@@ -31,7 +31,7 @@ const Profile = () => {
 
   const handleNavigation = useCallback(
     (to) => {
-      navigation.navigate(to);
+      navigation.push(to);
     },
     [navigation],
   );
@@ -45,7 +45,7 @@ const Profile = () => {
     {name: t('navigation.changePassword'), to: 'Register2', icon: 'lock-open'},
     {name: t('navigation.listTransaction'), to: 'Register2', icon: 'file-copy'},
     {name: t('navigation.address'), to: 'Register2', icon: 'edit-location'},
-    {name: t('navigation.liveChat'), to: 'Register2', icon: 'chat'},
+    {name: t('navigation.liveChat'), to: 'Crisp', icon: 'chat'},
     {name: t('navigation.privacy'), to: 'Register2', icon: 'privacy-tip'},
     {name: t('navigation.about'), to: 'Register2', icon: 'contact-support'},
     {name: t('navigation.help'), to: 'Register2', icon: 'help-outline'},

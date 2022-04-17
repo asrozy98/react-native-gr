@@ -33,6 +33,16 @@ export interface OnDelete {
     message: string;
 }
 
+export interface SelectKeranjang {
+    readonly type: 'ON_SELECT_KERANJANG';
+    loading: boolean;
+    select: {
+        cart: [];
+        selectAll: boolean;
+        sum: number;
+    }
+}
+
 export interface KeranjangListErrorAction {
     readonly type: 'ON_KERANJANG_ERROR';
     error: any;
@@ -45,6 +55,7 @@ export type KeranjangAction =
     | OnLoading
     | OnDelete
     | AddKeranjang
+    | SelectKeranjang
     | UpdateKeranjang;
 
 export const onListKeranjang = (
@@ -112,14 +123,14 @@ export const onDeleteKeranjang = (
                     error: response.data.message,
                     loading: false,
                 });
-                ToastAndroid.show(`${response.data.message}`, ToastAndroid.SHORT);
+                ToastAndroid.show(`Cart: ${response.data.message}`, ToastAndroid.SHORT);
             } else {
                 dispatch({
                     type: 'ON_DELETE_KERANJANG',
                     message: response.data.message,
                     loading: false
                 });
-                ToastAndroid.show(`${response.data.message}`, ToastAndroid.SHORT);
+                ToastAndroid.show(`Cart: ${response.data.message}`, ToastAndroid.SHORT);
                 dispatch(onListKeranjang(token));
             }
         } catch (error) {
@@ -128,7 +139,7 @@ export const onDeleteKeranjang = (
                 error: error,
                 loading: false,
             });
-            ToastAndroid.show(`${error}`, ToastAndroid.SHORT);
+            ToastAndroid.show(`Cart: ${error}`, ToastAndroid.SHORT);
         }
     };
 };
@@ -154,14 +165,14 @@ export const onAddKeranjang = (
                     error: response.data.message,
                     loading: false,
                 });
-                ToastAndroid.show(`${response.data.message}`, ToastAndroid.SHORT);
+                ToastAndroid.show(`Cart: ${response.data.message}`, ToastAndroid.SHORT);
             } else {
                 dispatch({
                     type: 'ON_ADD_KERANJANG',
                     message: response.data.message,
                     loading: false,
                 });
-                ToastAndroid.show(`${response.data.message}`, ToastAndroid.SHORT);
+                ToastAndroid.show(`Cart: ${response.data.message}`, ToastAndroid.SHORT);
                 dispatch(onListKeranjang(token));
             }
         } catch (error) {
@@ -170,7 +181,7 @@ export const onAddKeranjang = (
                 error: error,
                 loading: false,
             });
-            ToastAndroid.show(`${error}`, ToastAndroid.SHORT);
+            ToastAndroid.show(`Cart: ${error}`, ToastAndroid.SHORT);
         }
     };
 };
@@ -197,14 +208,14 @@ export const onUpdateKeranjang = (
                     error: response.data.message,
                     loading: false,
                 });
-                ToastAndroid.show(`${response.data.message}`, ToastAndroid.SHORT);
+                ToastAndroid.show(`Cart: ${response.data.message}`, ToastAndroid.SHORT);
             } else {
                 dispatch({
                     type: 'ON_UPDATE_KERANJANG',
                     message: response.data.message,
                     loading: false,
                 });
-                ToastAndroid.show(`${response.data.message}`, ToastAndroid.SHORT);
+                ToastAndroid.show(`Cart: ${response.data.message}`, ToastAndroid.SHORT);
                 dispatch(onListKeranjang(token));
             }
         } catch (error) {
@@ -213,7 +224,22 @@ export const onUpdateKeranjang = (
                 error: error,
                 loading: false,
             });
-            ToastAndroid.show(`${error}`, ToastAndroid.SHORT);
+            ToastAndroid.show(`Cart: ${error}`, ToastAndroid.SHORT);
+        }
+    };
+};
+
+export const onSelectKeranjang = (
+    cart: any,
+    selectAll: boolean,
+    sum: number
+) => {
+    return {
+        type: 'ON_SELECT_KERANJANG',
+        select: {
+            cart: cart,
+            selectAll: selectAll,
+            sum: sum
         }
     };
 };

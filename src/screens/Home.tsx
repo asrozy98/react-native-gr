@@ -10,6 +10,7 @@ import {ActivityIndicator, FlatList} from 'react-native';
 import {onListKategori} from '../redux/actions/kategoriActions';
 import {useNavigation} from '@react-navigation/native';
 import {onListKeranjang} from '../redux/actions/keranjangActions';
+import {onWishlist} from '../redux/actions/wishlistActions';
 
 const Home = () => {
   const {t} = useTranslation();
@@ -32,8 +33,8 @@ const Home = () => {
     dispatch(onProfile(auth.token));
     dispatch(onListKategori(auth.token, 5));
     dispatch(onProduk(auth.token, kategori, cari, page));
-    console.log(data);
-  }, [kategori, cari, page]);
+    dispatch(onWishlist(auth.token));
+  }, [dataKat, kategori, cari, page]);
 
   const setPerPage = () => {
     dispatch(onLoading());
@@ -65,7 +66,7 @@ const Home = () => {
         color={colors.card}
         paddingHorizontal={sizes.sm}
         paddingBottom={sizes.s}>
-        {loading ? (
+        {loading == true ? (
           <Block justify="center">
             <ActivityIndicator size="large" color={colors.primary} />
           </Block>
@@ -152,9 +153,9 @@ const Home = () => {
               ListEmptyComponent={() => <Text center>{t('common.empty')}</Text>}
             />
           )}
-          {loading ? (
+          {loading == true && (
             <ActivityIndicator size="large" color={colors.primary} />
-          ) : null}
+          )}
         </Block>
       </Block>
     </Block>

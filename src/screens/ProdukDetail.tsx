@@ -9,7 +9,7 @@ import {
 import {FontAwesome5, Ionicons} from '@expo/vector-icons';
 import {useNavigation} from '@react-navigation/core';
 
-import {Block, Button, Image, Text} from '../components/';
+import {Block, Button, Image, Text, Produk} from '../components/';
 import {useData, useTheme, useTranslation} from '../hooks/';
 import numeral from 'numeral';
 import {TouchableOpacity} from 'react-native-gesture-handler';
@@ -19,9 +19,9 @@ import RenderHtml, {
 } from 'react-native-render-html';
 import {ApplicationState} from '../redux';
 import {useDispatch, useSelector} from 'react-redux';
-import Produk from '../components/Produk';
 import {onKategoriProduk} from '../redux/actions/produkActions';
 import {onAddKeranjang} from '../redux/actions/keranjangActions';
+import {addWishlist, deleteWishlist} from '../redux/actions/wishlistActions';
 
 const isAndroid = Platform.OS === 'android';
 
@@ -39,6 +39,9 @@ const ProdukDetail = ({route}) => {
   const {katData, loading} = useSelector(
     (state: ApplicationState) => state.ProdukReducer,
   );
+  const wishlist = useSelector(
+    (state: ApplicationState) => state.WishlistReducer,
+  );
 
   const IMAGE_SIZE = (sizes.width - (sizes.padding + sizes.sm) * 2) / 3;
   const IMAGE_VERTICAL_SIZE =
@@ -49,7 +52,7 @@ const ProdukDetail = ({route}) => {
 
   useEffect(() => {
     dispatch(onKategoriProduk(auth.token, category_id, 4));
-  }, [category_id]);
+  }, [category_id, wishlist.data]);
 
   const handleSocialLink = useCallback(
     (type: 'twitter' | 'dribbble') => {
@@ -196,8 +199,16 @@ const ProdukDetail = ({route}) => {
         <Block>
           <Button
             // gradient={gradients.secondary}
-            onPress={() => navigation.navigate('Cart')}>
-            <FontAwesome5 name="heart" size={24} color={colors.white} />
+            onPress={() => {
+              wishlist.data.find((item) => item.product_id === product_id)
+                ? dispatch(deleteWishlist(auth.token, product_id))
+                : dispatch(addWishlist(auth.token, product_id));
+            }}>
+            {wishlist.data.find((item) => item.product_id === product_id) ? (
+              <Ionicons name="heart" size={24} color="red" />
+            ) : (
+              <FontAwesome5 name="heart" size={24} color={colors.white} />
+            )}
           </Button>
         </Block>
         <Block>

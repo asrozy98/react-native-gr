@@ -74,7 +74,8 @@
     "register": "Create account",
     "login": "Login",
     "extra": "Extra - Automotive",
-    "category": "Product Category: "
+    "category": "Product Category",
+    "wishlist": "Wishlist"
   },
   "navigation": {
     "home": "Gemah Ripah",
@@ -101,7 +102,8 @@
     "listTransaction": "List Transaction",
     "address": "Address",
     "liveChat": "Live Chat",
-    "help": "Help"
+    "help": "Help",
+    "wishlist": "Wishlist"
   },
   "menu": {
     "started": "Getting Started",

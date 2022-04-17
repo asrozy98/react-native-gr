@@ -1,8 +1,14 @@
+import { selectionAsync } from 'expo-haptics';
 import { KeranjangAction } from './../actions/keranjangActions';
 
 type KeranjangState = {
     // user: AuthModel
     data: [] | null;
+    select: {
+        cart: [] | null;
+        selectAll: boolean;
+        sum: number;
+    };
     count: number;
     error: string | undefined;
     loading: boolean;
@@ -10,7 +16,12 @@ type KeranjangState = {
 }
 
 const intialState = {
-    data: null,
+    data: [],
+    select: {
+        cart: [],
+        selectAll: false,
+        sum: 0,
+    },
     error: undefined,
     count: 0,
     loading: true,
@@ -55,6 +66,17 @@ const KeranjangReducer = (state: KeranjangState = intialState, action: Keranjang
                 ...state,
                 loading: action.loading,
                 message: action.message,
+            };
+        case 'ON_SELECT_KERANJANG':
+            return {
+                ...state,
+                loading: action.loading,
+                select: {
+                    ...state.select,
+                    cart: action.select.cart,
+                    selectAll: action.select.selectAll,
+                    sum: action.select.sum
+                }
             };
         default:
             return state;

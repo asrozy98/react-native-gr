@@ -74,7 +74,8 @@
     "register": "Buat Akun",
     "login": "Login",
     "extra": "Tambahan - Otomotif",
-    "category": "Produk Kategori: "
+    "category": "Produk Kategori: ",
+    "wishlist": "Favorit"
   },
   "navigation": {
     "home": "Gemah Ripah",
@@ -101,7 +102,8 @@
     "listTransaction": "Daftar Transaksi",
     "address": "Alamat",
     "liveChat": "Live Chat",
-    "help": "Bantuan"
+    "help": "Bantuan",
+    "wishlist": "Favorit"
   },
   "menu": {
     "started": "Mulai",

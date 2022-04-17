@@ -51,8 +51,8 @@ const Login = () => {
         // navigation.navigate('Home');
       }
     } catch (error) {
-      console.warn(error);
-      console.log(error);
+      console.warn('restoreToken: ' + error);
+      console.log('restoreToken: ' + error);
     }
     // }, 1000);
   };

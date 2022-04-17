@@ -13,11 +13,14 @@ import {
   Kategori,
   KategoriDetail,
   Keranjang,
+  Checkout,
+  Crisp,
 } from '../screens';
 import {useScreenOptions, useTheme, useTranslation} from '../hooks';
 import {ApplicationState, store} from '../redux';
 import {useSelector} from 'react-redux';
 import VerifikasiOtp from '../screens/VerifikasiOtp';
+import Wishlist from '../screens/Wishlist';
 
 const Stack = createStackNavigator();
 
@@ -86,6 +89,12 @@ export default () => {
           />
 
           <Stack.Screen
+            name="Wishlist"
+            component={Wishlist}
+            options={{title: t('navigation.wishlist')}}
+          />
+
+          <Stack.Screen
             name="Components"
             component={Components}
             options={screenOptions.components}
@@ -119,6 +128,17 @@ export default () => {
             name="Keranjang"
             component={Keranjang}
             options={{title: t('navigation.cart')}}
+          />
+          <Stack.Screen
+            name="Checkout"
+            component={Checkout}
+            options={{headerShown: false}}
+          />
+
+          <Stack.Screen
+            name="Crisp"
+            component={Crisp}
+            options={{title: 'Crisp'}}
           />
         </Stack.Group>
       </Stack.Navigator>

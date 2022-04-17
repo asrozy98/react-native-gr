@@ -16,6 +16,10 @@ const ApiLink = {
     Keranjang: BaseUrl + '/product/cart',
     KeranjangDelete: BaseUrl + '/product/cart/delete',
     Produk: BaseUrl + '/product',
+    Wishlist: BaseUrl + '/product/wishlist',
+    WishlistAdd: BaseUrl + '/product/wishlist/tambah',
+    WishlistDelete: BaseUrl + '/product/wishlist/delete',
+    Alamat: BaseUrl + '/profile/address',
 }
 
 export default ApiLink;

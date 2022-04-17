@@ -48,11 +48,11 @@ export default () => {
           style={{marginRight: sizes.sm}}
           onPress={() =>
             navigation.navigate('Screens', {
-              screen: 'Pro',
+              screen: 'Crisp',
             })
           }>
-          <Image source={icons.bell} radius={0} color={colors.white} />
-          <Block
+          <Image source={icons.chat} radius={0} color={colors.white} />
+          {/* <Block
             flex={0}
             right={0}
             width={sizes.s}
@@ -60,7 +60,7 @@ export default () => {
             radius={sizes.xs}
             position="absolute"
             gradient={gradients?.danger}
-          />
+          /> */}
         </TouchableOpacity>
         <TouchableOpacity
           onPress={() =>
@@ -118,11 +118,11 @@ export default () => {
           style={{marginRight: sizes.sm}}
           onPress={() =>
             navigation.navigate('Screens', {
-              screen: 'Pro',
+              screen: 'Crisp',
             })
           }>
-          <Image source={icons.bell} radius={0} color={colors.white} />
-          <Block
+          <Image source={icons.chat} radius={0} color={colors.white} />
+          {/* <Block
             flex={0}
             right={0}
             width={sizes.s}
@@ -130,7 +130,7 @@ export default () => {
             radius={sizes.xs}
             position="absolute"
             gradient={gradients?.danger}
-          />
+          /> */}
         </TouchableOpacity>
         <TouchableOpacity
           onPress={() => {

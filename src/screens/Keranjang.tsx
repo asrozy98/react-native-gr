@@ -1,15 +1,7 @@
 import React, {useCallback, useEffect, useState} from 'react';
 
 import {useData, useTheme, useTranslation} from '../hooks/';
-import {
-  Block,
-  Button,
-  Image,
-  Input,
-  ListItem,
-  // Checkbox,
-  Text,
-} from '../components/';
+import {Block, Button, Image, Input, ListItem, Text} from '../components/';
 import {useDispatch, useSelector} from 'react-redux';
 import {ApplicationState} from '../redux';
 import {ActivityIndicator, FlatList, TouchableOpacity} from 'react-native';
@@ -17,63 +9,43 @@ import {
   onDeleteKeranjang,
   onListKeranjang,
   onLoading,
+  onSelectKeranjang,
   onUpdateKeranjang,
 } from '../redux/actions/keranjangActions';
 import {FontAwesome5, MaterialIcons} from '@expo/vector-icons';
 import numeral from 'numeral';
 import {Checkbox} from 'react-native-paper';
-
-interface CartSelected {
-  data: any;
-  selectAll: boolean;
-  sum: number;
-}
+import {useNavigation} from '@react-navigation/native';
 
 const Keranjang = () => {
   const {t} = useTranslation();
-  const [tab, setTab] = useState<number>(0);
   const dispatch = useDispatch();
-  const {following, trending} = useData();
+  const navigation = useNavigation();
   const {assets, colors, fonts, gradients, sizes} = useTheme();
   const auth = useSelector((state: ApplicationState) => state.AuthReducer);
   const dataKer = useSelector(
     (state: ApplicationState) => state.KeranjangReducer,
   );
 
-  const [isSelect, setIsSelect] = useState<CartSelected>({
-    data: [],
-    selectAll: false,
-    sum: 0,
-  });
-
   useEffect(() => {
     dispatch(onListKeranjang(auth.token));
-  }, [dataKer.count, isSelect]);
+  }, [dataKer.count, dataKer.select]);
 
   const selectItem = (id: number, sum: number) => {
-    let array = isSelect.data;
+    let array = dataKer.select.cart;
     let index = array.indexOf(id);
     let sumTotal = 0;
     if (array.includes(id)) {
       array.splice(index, 1);
-      sumTotal = isSelect.sum - sum;
+      sumTotal = dataKer.select.sum - sum;
     } else {
       array.push(id);
-      sumTotal = isSelect.sum + sum;
+      sumTotal = dataKer.select.sum + sum;
     }
     if (array.length === dataKer.count) {
-      setIsSelect({
-        ...isSelect,
-        data: array,
-        selectAll: true,
-        sum: sumTotal,
-      });
+      dispatch(onSelectKeranjang(array, true, sumTotal));
     } else {
-      setIsSelect({
-        data: array,
-        selectAll: false,
-        sum: sumTotal,
-      });
+      dispatch(onSelectKeranjang(array, false, sumTotal));
     }
   };
 
@@ -81,41 +53,37 @@ const Keranjang = () => {
     let array = [];
     let select = false;
     let sum = 0;
-    if (isSelect.selectAll === false) {
+    if (dataKer.select.selectAll === false) {
       dataKer.data.map((item) => {
         array.push(item.id);
         sum += item.price_total;
       });
       select = true;
-    } else if (isSelect.selectAll) {
+    } else if (dataKer.select.selectAll) {
       array = [];
       select = false;
     }
-    setIsSelect({
-      data: array,
-      selectAll: select,
-      sum: sum,
-    });
+    dispatch(onSelectKeranjang(array, select, sum));
   };
 
   const CardItem = ({itemData}) => {
     return (
       <Block card marginVertical={sizes.s}>
-        {/* <TouchableOpacity> */}
         <Checkbox
-          status={isSelect.data.includes(itemData.id) ? 'checked' : 'unchecked'}
+          status={
+            dataKer.select.cart.includes(itemData.id) ? 'checked' : 'unchecked'
+          }
           onPress={() => {
             selectItem(itemData.id, itemData.price_total);
           }}
         />
-        {/* </TouchableOpacity> */}
         <Block row marginTop={-sizes.s}>
           <Image
             resizeMode="contain"
             source={{uri: itemData.product_image}}
             style={{height: sizes.width / 3.5, width: sizes.width / 2.5}}
           />
-          <Block padding={sizes.s} justify="space-between">
+          <Block marginTop={-sizes.m} padding={sizes.s} justify="space-between">
             <TouchableOpacity>
               <Block row align="center">
                 <Text p semibold marginRight={sizes.s} color={colors.link}>
@@ -131,7 +99,6 @@ const Keranjang = () => {
               justify="center"
               marginVertical={sizes.s}
               marginRight={sizes.xxl}>
-              {/* <Block> */}
               <TouchableOpacity
                 onPress={() => {
                   dispatch(
@@ -141,11 +108,7 @@ const Keranjang = () => {
                       itemData.qty + 1,
                     ),
                   );
-                  setIsSelect({
-                    data: [],
-                    selectAll: false,
-                    sum: 0,
-                  });
+                  dispatch(onSelectKeranjang([], false, 0));
                 }}>
                 <MaterialIcons
                   name="add-circle"
@@ -153,11 +116,9 @@ const Keranjang = () => {
                   color={colors.text}
                 />
               </TouchableOpacity>
-              {/* </Block> */}
               <Block marginHorizontal={sizes.s}>
                 <Text center>{itemData.qty}</Text>
               </Block>
-              {/* <Block> */}
               <TouchableOpacity
                 onPress={() => {
                   dispatch(
@@ -167,11 +128,7 @@ const Keranjang = () => {
                       itemData.qty - 1,
                     ),
                   );
-                  setIsSelect({
-                    data: [],
-                    selectAll: false,
-                    sum: 0,
-                  });
+                  dispatch(onSelectKeranjang([], false, 0));
                 }}>
                 <MaterialIcons
                   name="remove-circle"
@@ -179,7 +136,6 @@ const Keranjang = () => {
                   color={colors.text}
                 />
               </TouchableOpacity>
-              {/* </Block> */}
             </Block>
             <Block>
               <Text>
@@ -239,8 +195,7 @@ const Keranjang = () => {
         paddingLeft={sizes.s}
         position="absolute">
         <Checkbox
-          // color={colors.white}
-          status={isSelect.selectAll ? 'checked' : 'unchecked'}
+          status={dataKer.select.selectAll ? 'checked' : 'unchecked'}
           onPress={() => selectAll()}
         />
         <Text paddingLeft={sizes.s} white bold>
@@ -248,13 +203,14 @@ const Keranjang = () => {
         </Text>
         <Block>
           <Text white bold align="right" marginRight={sizes.s}>
-            {t('common.total')} Rp. {numeral(isSelect.sum).format('0,0[.]00')}
+            {t('common.total')} Rp.{' '}
+            {numeral(dataKer.select.sum).format('0,0[.]00')}
           </Text>
         </Block>
         <Block>
           <Button
             gradient={gradients.primary}
-            onPress={() => navigation.navigate('Cart')}>
+            onPress={() => navigation.push('Checkout')}>
             <Text white p bold>
               {t('product.buyNow')}
             </Text>
