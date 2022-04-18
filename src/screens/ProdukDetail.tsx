@@ -54,21 +54,6 @@ const ProdukDetail = ({route}) => {
     dispatch(onKategoriProduk(auth.token, category_id, 4));
   }, [category_id, wishlist.data]);
 
-  const handleSocialLink = useCallback(
-    (type: 'twitter' | 'dribbble') => {
-      const url =
-        type === 'twitter'
-          ? `https://twitter.com/${user?.social?.twitter}`
-          : `https://dribbble.com/${user?.social?.dribbble}`;
-
-      try {
-        Linking.openURL(url);
-      } catch (error) {
-        alert(`Cannot open URL: ${url}`);
-      }
-    },
-    [user],
-  );
   const source = {
     html: `<blue-circle>${description}</blue-circle>`,
   };
@@ -83,6 +68,14 @@ const ProdukDetail = ({route}) => {
       contentModel: HTMLContentModel.block,
     }),
   };
+
+  const HtmlComponent = React.memo(() => (
+    <RenderHtml
+      contentWidth={width}
+      source={source}
+      customHTMLElementModels={customHTMLElementModels}
+    />
+  ));
 
   return (
     <Block safe marginTop={sizes.xs}>
@@ -152,11 +145,7 @@ const ProdukDetail = ({route}) => {
             <Text h5 semibold marginBottom={sizes.s} marginTop={sizes.sm}>
               {t('product.description')}:
             </Text>
-            <RenderHtml
-              contentWidth={width}
-              source={source}
-              customHTMLElementModels={customHTMLElementModels}
-            />
+            <HtmlComponent />
           </Block>
 
           {/* product: product similar */}
@@ -200,11 +189,11 @@ const ProdukDetail = ({route}) => {
           <Button
             // gradient={gradients.secondary}
             onPress={() => {
-              wishlist.data.find((item) => item.product_id === product_id)
+              wishlist.data.find((item) => item.id === product_id)
                 ? dispatch(deleteWishlist(auth.token, product_id))
                 : dispatch(addWishlist(auth.token, product_id));
             }}>
-            {wishlist.data.find((item) => item.product_id === product_id) ? (
+            {wishlist.data.find((item) => item.id === product_id) ? (
               <Ionicons name="heart" size={24} color="red" />
             ) : (
               <FontAwesome5 name="heart" size={24} color={colors.white} />

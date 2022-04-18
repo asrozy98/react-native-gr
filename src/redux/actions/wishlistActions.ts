@@ -80,11 +80,11 @@ export const addWishlist = (token: string | null, produk: number | null,) => {
     return async (dispatch: Dispatch<WishlistAction>) => {
 
         try {
-            const response = await axios.get(ApiLink.WishlistAdd, {
+            const response = await axios.post(ApiLink.Wishlist, {
+                product_id: produk,
+            }, {
                 headers: {
                     Authorization: `Bearer ${token}`
-                }, params: {
-                    product_id: produk,
                 }
             })
 
@@ -119,13 +119,13 @@ export const deleteWishlist = (token: string | null, produk: number | null,) => 
     return async (dispatch: Dispatch<WishlistAction>) => {
 
         try {
-            const response = await axios.get(ApiLink.WishlistDelete, {
+            const response = await axios.delete(ApiLink.Wishlist, {
                 headers: {
-                    Authorization: `Bearer ${token}`
+                    Authorization: `Bearer ${token}`,
                 }, params: {
                     product_id: produk,
                 }
-            })
+            });
 
             if (!response) {
                 dispatch({

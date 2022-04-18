@@ -11,14 +11,9 @@ const ApiLink = {
     Profile: BaseUrl + '/profile',
 
     Kategori: BaseUrl + '/product/category',
-    KeranjangAdd: BaseUrl + '/product/cart/tambah',
-    KeranjangUpdate: BaseUrl + '/product/cart/update',
     Keranjang: BaseUrl + '/product/cart',
-    KeranjangDelete: BaseUrl + '/product/cart/delete',
     Produk: BaseUrl + '/product',
     Wishlist: BaseUrl + '/product/wishlist',
-    WishlistAdd: BaseUrl + '/product/wishlist/tambah',
-    WishlistDelete: BaseUrl + '/product/wishlist/delete',
     Alamat: BaseUrl + '/profile/address',
 }
 

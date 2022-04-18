@@ -107,11 +107,11 @@ export const onDeleteKeranjang = (
 ) => {
     return async (dispatch: Dispatch<KeranjangAction>) => {
         try {
-            const response = await axios.get(ApiLink.KeranjangDelete, {
+            const response = await axios.delete(ApiLink.Keranjang, {
                 headers: {
                     Authorization: `Bearer ${token}`,
                 },
-                params: {
+                data: {
                     product_id: product_id,
                     user_id: user_id,
                 },
@@ -150,12 +150,12 @@ export const onAddKeranjang = (
 ) => {
     return async (dispatch: Dispatch<KeranjangAction>) => {
         try {
-            const response = await axios.get(ApiLink.KeranjangAdd, {
+            const response = await axios.post(ApiLink.Keranjang, {
+                product_id: product_id,
+                qty: 1
+            }, {
                 headers: {
                     Authorization: `Bearer ${token}`
-                }, params: {
-                    product_id: product_id,
-                    qty: 1
                 }
             });
 
@@ -193,12 +193,12 @@ export const onUpdateKeranjang = (
 ) => {
     return async (dispatch: Dispatch<KeranjangAction>) => {
         try {
-            const response = await axios.get(ApiLink.KeranjangUpdate, {
+            const response = await axios.put(ApiLink.Keranjang, {
+                product_id: product_id,
+                qty: qty
+            }, {
                 headers: {
                     Authorization: `Bearer ${token}`
-                }, params: {
-                    product_id: product_id,
-                    qty: qty
                 }
             });
 

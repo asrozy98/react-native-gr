@@ -29,20 +29,20 @@ const Home = () => {
   );
 
   useEffect(() => {
+    dispatch(onProduk(auth.token, kategori, cari, page));
     dispatch(onListKeranjang(auth.token));
     dispatch(onProfile(auth.token));
     dispatch(onListKategori(auth.token, 5));
-    dispatch(onProduk(auth.token, kategori, cari, page));
     dispatch(onWishlist(auth.token));
-  }, [dataKat, kategori, cari, page]);
+  }, [kategori, cari, page]);
 
   const setPerPage = () => {
-    dispatch(onLoading());
-    if (page < count) {
+    if (page === count) {
       setPage(page + 10);
     } else {
-      setPage(count);
+      setPage(page + count);
     }
+    dispatch(onLoading());
   };
 
   return (
@@ -66,11 +66,7 @@ const Home = () => {
         color={colors.card}
         paddingHorizontal={sizes.sm}
         paddingBottom={sizes.s}>
-        {loading == true ? (
-          <Block justify="center">
-            <ActivityIndicator size="large" color={colors.primary} />
-          </Block>
-        ) : (
+        {dataKat.data ? (
           <>
             {dataKat.data?.map((item, key) => (
               <Button onPress={() => setKategori(item.id)} key={`kat-${key}`}>
@@ -134,6 +130,10 @@ const Home = () => {
               </Block>
             </Button>
           </>
+        ) : (
+          <Block justify="center">
+            <ActivityIndicator size="large" color={colors.primary} />
+          </Block>
         )}
       </Block>
 
@@ -142,7 +142,7 @@ const Home = () => {
         paddingHorizontal={sizes.padding}
         contentContainerStyle={{paddingBottom: sizes.l}}>
         <Block justify="center" marginTop={sizes.sm}>
-          {data && (
+          {data ? (
             <FlatList
               data={data}
               onEndReached={() => setPerPage()}
@@ -152,9 +152,13 @@ const Home = () => {
               numColumns={2}
               ListEmptyComponent={() => <Text center>{t('common.empty')}</Text>}
             />
-          )}
-          {loading == true && (
+          ) : (
             <ActivityIndicator size="large" color={colors.primary} />
+          )}
+          {data !== null && loading && (
+            <Block justify="center" marginVertical={sizes.m}>
+              <ActivityIndicator size="large" color={colors.primary} />
+            </Block>
           )}
         </Block>
       </Block>

@@ -48,7 +48,7 @@ const Wishlist = () => {
         paddingHorizontal={sizes.padding}
         contentContainerStyle={{paddingBottom: sizes.l}}>
         <Block justify="center" marginTop={sizes.sm}>
-          {data && (
+          {data ? (
             <FlatList
               data={data}
               // onEndReached={() => setPerPage()}
@@ -58,10 +58,9 @@ const Wishlist = () => {
               numColumns={2}
               ListEmptyComponent={() => <Text center>{t('common.empty')}</Text>}
             />
-          )}
-          {loading ? (
+          ) : (
             <ActivityIndicator size="large" color={colors.primary} />
-          ) : null}
+          )}
         </Block>
       </Block>
     </Block>

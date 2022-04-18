@@ -34,10 +34,10 @@ const KategoriDetail = ({route}) => {
   }, [cari, page]);
   const setPerPage = () => {
     dispatch(onLoading());
-    if (page < count) {
+    if (page == count) {
       setPage(page + 10);
     } else {
-      setPage(count);
+      setPage(page + count);
     }
   };
 
@@ -57,7 +57,7 @@ const KategoriDetail = ({route}) => {
         paddingHorizontal={sizes.padding}
         contentContainerStyle={{paddingBottom: sizes.l}}>
         <Block justify="center" marginTop={sizes.sm}>
-          {data && (
+          {data ? (
             <FlatList
               data={data}
               onEndReached={() => setPerPage()}
@@ -67,10 +67,14 @@ const KategoriDetail = ({route}) => {
               numColumns={2}
               ListEmptyComponent={() => <Text center>{t('common.empty')}</Text>}
             />
-          )}
-          {loading ? (
+          ) : (
             <ActivityIndicator size="large" color={colors.primary} />
-          ) : null}
+          )}
+          {data !== null && loading && (
+            <Block justify="center" marginVertical={sizes.m}>
+              <ActivityIndicator size="large" color={colors.primary} />
+            </Block>
+          )}
         </Block>
       </Block>
     </Block>

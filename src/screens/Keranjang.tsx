@@ -148,7 +148,7 @@ const Keranjang = () => {
         <Block align="flex-end" marginTop={-sizes.m}>
           <TouchableOpacity
             onPress={() => {
-              dispatch(onListKeranjang(auth.token, perPage));
+              dispatch(onListKeranjang(auth.token));
               dispatch(
                 onDeleteKeranjang(
                   auth.token,
@@ -171,17 +171,16 @@ const Keranjang = () => {
         paddingHorizontal={sizes.padding}
         contentContainerStyle={{paddingBottom: sizes.l}}>
         <Block justify="center" marginTop={sizes.sm}>
-          {dataKer.data && (
+          {dataKer.data ? (
             <FlatList
               data={dataKer.data}
               renderItem={(item) => <CardItem itemData={item.item} />}
               keyExtractor={(item) => item.product_name}
               ListEmptyComponent={() => <Text center>{t('common.empty')}</Text>}
             />
-          )}
-          {dataKer.loading ? (
+          ) : (
             <ActivityIndicator size="large" color={colors.primary} />
-          ) : null}
+          )}
         </Block>
       </Block>
       <Block
@@ -198,7 +197,7 @@ const Keranjang = () => {
           status={dataKer.select.selectAll ? 'checked' : 'unchecked'}
           onPress={() => selectAll()}
         />
-        <Text paddingLeft={sizes.s} white bold>
+        <Text paddingRight={sizes.s} white bold>
           {t('common.all')}
         </Text>
         <Block>

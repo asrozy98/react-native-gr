@@ -13,7 +13,7 @@ const Kategori = () => {
   const dispatch = useDispatch();
   const {following, trending} = useData();
   const [kategori, setKategori] = useState(null);
-  const [perPage, setPage] = useState(15);
+  const [perPage, setPage] = useState(13);
   const {assets, colors, fonts, gradients, sizes} = useTheme();
   const auth = useSelector((state: ApplicationState) => state.AuthReducer);
   const dataKat = useSelector(
@@ -35,7 +35,7 @@ const Kategori = () => {
         paddingHorizontal={sizes.padding}
         contentContainerStyle={{paddingBottom: sizes.l}}>
         <Block justify="center" marginTop={sizes.sm}>
-          {dataKat.data && (
+          {dataKat.data ? (
             <FlatList
               data={dataKat.data}
               onEndReached={() => setPerPage()}
@@ -44,10 +44,9 @@ const Kategori = () => {
               keyExtractor={(item) => item.id}
               ListEmptyComponent={() => <Text center>{t('common.empty')}</Text>}
             />
-          )}
-          {dataKat.loading ? (
+          ) : (
             <ActivityIndicator size="large" color={colors.primary} />
-          ) : null}
+          )}
         </Block>
       </Block>
     </Block>
